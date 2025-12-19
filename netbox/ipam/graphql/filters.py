@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     from netbox.graphql.filter_lookups import IntegerArrayLookup, IntegerLookup
     from circuits.graphql.filters import ProviderFilter
     from core.graphql.filters import ContentTypeFilter
-    from dcim.graphql.filters import SiteFilter
+    from dcim.graphql.filters import LocationFilter, RegionFilter, SiteFilter, SiteGroupFilter
     from vpn.graphql.filters import L2VPNFilter
     from .enums import *
 
@@ -250,6 +250,19 @@ class PrefixFilter(ContactFilterMixin, ScopedFilterMixin, TenancyFilterMixin, Pr
     role_id: ID | None = strawberry_django.filter_field()
     is_pool: FilterLookup[bool] | None = strawberry_django.filter_field()
     mark_utilized: FilterLookup[bool] | None = strawberry_django.filter_field()
+
+    _location: Annotated['LocationFilter', strawberry.lazy('dcim.graphql.filters')] | None = (
+        strawberry_django.filter_field(name='location')
+    )
+    _region: Annotated['RegionFilter', strawberry.lazy('dcim.graphql.filters')] | None = (
+        strawberry_django.filter_field(name='region')
+    )
+    _site_group: Annotated['SiteGroupFilter', strawberry.lazy('dcim.graphql.filters')] | None = (
+        strawberry_django.filter_field(name='site_group')
+    )
+    _site: Annotated['SiteFilter', strawberry.lazy('dcim.graphql.filters')] | None = (
+        strawberry_django.filter_field(name='site')
+    )
 
     @strawberry_django.filter_field()
     def contains(self, value: list[str], prefix) -> Q:
