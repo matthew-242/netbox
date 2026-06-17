@@ -1,0 +1,2 @@
+[allowlist]
+paths = ["netbox/secrets/tests/constants.py", "netbox/secrets/tests/test_api.py"]
